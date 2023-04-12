@@ -13,9 +13,11 @@ RUN apk update && apk add --no-cache \
     curl \
     openjdk8 
 
+RUN apk add --update alpine-sdk
+
 WORKDIR /app
 
-COPY ./ibex-lib /app
+COPY ./ibex-lib-master /app
 RUN ./waf configure --lp-lib=soplex --interval-lib=gaol --lp-lib=soplex \
 && ./waf
 
