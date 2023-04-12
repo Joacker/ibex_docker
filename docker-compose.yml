@@ -9,7 +9,7 @@ services:
       - 81:8000
     #make a volumes for an entire folder of cpp files
     # volumes:
-    #   - ./back:/app
+    #   - ./back:/app&ibex-lib/examples
     #make still runing container
     stdin_open: true
     tty: true
