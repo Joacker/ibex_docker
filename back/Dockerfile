@@ -21,7 +21,7 @@ COPY ./ibex-lib-master /app
 RUN ./waf configure --lp-lib=soplex --interval-lib=gaol --lp-lib=soplex \
 && ./waf
 
-# ./__build__/src/ibexopt benchs/optim/medium/ex14_2_7.bch --random-seed=1
+# ./__build__/src/ibexopt benchs/optim/medium/alkylbis.bch --random-seed=1
 
 # Mantener el contenedor en ejecución
 CMD ["tail", "-f", "/dev/null"]
