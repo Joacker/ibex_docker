@@ -1,8 +1,10 @@
-//make a program that prints "hola mundo" in the console
+#include "ibex.h"
 #include <iostream>
+
 using namespace std;
-int main()
-{
-    cout << "hola mundo" << endl;
-    return 0;
+using namespace ibex;
+
+int main(int argc, char** argv) {
+  Interval x(0,1);
+  cout << "My first interval:" << x << endl;
 }

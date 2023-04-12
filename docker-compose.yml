@@ -8,8 +8,8 @@ services:
     ports:
       - 81:8000
     #make a volumes for an entire folder of cpp files
-    volumes:
-      - ./back:/usr/src/dockertest1/app
+    # volumes:
+    #   - ./back:/app
     #make still runing container
     stdin_open: true
     tty: true
