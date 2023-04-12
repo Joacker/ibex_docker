@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  app:
+    image: app
+    build: ./back
+    container_name: app
+    ports:
+      - 81:8000
+    #make a volumes for an entire folder of cpp files
+    volumes:
+      - ./back:/usr/src/dockertest1/back
+    #make still runing container
+    stdin_open: true
+    tty: true
+    #make a container restart when it stops
+    restart: always
+    #make a container run in background
+    command: /bin/bash -c "while true; do sleep 1; done"
