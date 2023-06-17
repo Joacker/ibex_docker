@@ -57,7 +57,7 @@ CMD ["tail", "-f", "/dev/null"]
 
 # COPY ./ibex-lib-master /app
 # #RUN ./waf configure --interval-lib=gaol --lp-lib=soplex \
-# #&& ./waf
+# #&& 
 
 # # ./__build__/src/ibexopt benchs/optim/medium/alkylbis.bch --random-seed=1
 
