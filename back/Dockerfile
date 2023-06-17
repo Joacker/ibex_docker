@@ -19,7 +19,7 @@ RUN apt install -y \
 WORKDIR /app
 
 COPY ./ibex-lib-master /app
-#RUN ./waf configure --interval-lib=gaol --lp-lib=soplex  --with-optim \
+#RUN ./waf configure --interval-lib=gaol --lp-lib=soplex \
 #&& ./waf
 
 # ./__build__/src/ibexopt benchs/optim/medium/alkylbis.bch --random-seed=1
