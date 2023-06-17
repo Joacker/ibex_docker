@@ -16,10 +16,6 @@ RUN apt install -y \
     python-is-python3
 #RUN apk add --update alpine-sdk
 
-RUN cd /usr/local/include \
-&& ln -s /usr/include/eigen3/Eigen Eigen \
-&& ln -s /usr/include/eigen3/unsupported unsupported
-
 WORKDIR /app
 
 COPY ./ibex-lib-master /app

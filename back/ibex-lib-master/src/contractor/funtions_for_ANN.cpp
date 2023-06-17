@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <fstream>
 #include <sstream>
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 #include <numeric>
 
 using namespace std;
