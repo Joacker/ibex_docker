@@ -1,25 +1,30 @@
-FROM alpine:3.15
+FROM ubuntu:latest
 
 
-RUN apk update && apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     bash \
     g++ \
     gcc \
     flex \
     bison \
-    python2 \
+    python2-dev \
     make \
-    wget \
-    curl \
-    openjdk8 
+    build-essential \
+    libeigen3-dev
 
-RUN apk add --update alpine-sdk
+RUN apt install -y \
+    python-is-python3
+#RUN apk add --update alpine-sdk
+
+RUN cd /usr/local/include \
+&& ln -s /usr/include/eigen3/Eigen Eigen \
+&& ln -s /usr/include/eigen3/unsupported unsupported
 
 WORKDIR /app
 
 COPY ./ibex-lib-master /app
-RUN ./waf configure --lp-lib=soplex --interval-lib=gaol --lp-lib=soplex \
-&& ./waf
+#RUN ./waf configure --interval-lib=gaol --lp-lib=soplex  --with-optim \
+#&& ./waf
 
 # ./__build__/src/ibexopt benchs/optim/medium/alkylbis.bch --random-seed=1
 

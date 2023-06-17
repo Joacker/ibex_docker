@@ -16,4 +16,6 @@ services:
     #make a container restart when it stops
     restart: always
     #make a container run in background
+    volumes:
+      - ./back/ibex-lib-master:/app
     command: /bin/bash -c "while true; do sleep 1; done"
