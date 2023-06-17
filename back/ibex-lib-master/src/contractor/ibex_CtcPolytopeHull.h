@@ -136,7 +136,7 @@ protected:
 
 private:
 	bool own_lr; // for memory cleanup
-	Matrix P;
+
 	/*
 	 * 2*n primal solutions (row by row).
 	 * The argmin of minimizing xi is at the (2*i)th row

@@ -1,38 +1,34 @@
-FROM alpine:3.13.5
+FROM ubuntu:latest
 
-RUN apk update && apk add --no-cache \
+
+RUN apt-get update && apt-get install -y \
     bash \
     g++ \
     gcc \
     flex \
     bison \
-    python2 \
-    make \
-    wget \
-    cmake \
-    curl \
+    python2-dev \
+    make \ 
     git \
-    build-base \
-    openjdk8 
-# Clone the Eigen repository
-RUN git clone https://github.com/eigenteam/eigen-git-mirror.git /usr/src/eigen
+    build-essential \
+    cmake 
 
-# Build and install Eigen
-RUN mkdir /usr/src/eigen/build && \
-    cd /usr/src/eigen/build && \
-    cmake .. && \
-    make install
-
+RUN apt install -y \
+     python-is-python3
 # ./waf distclean
 
-# Cleanup
-RUN rm -rf /usr/src/eigen
+RUN apt install libeigen3-dev
 
-RUN apk add --update alpine-sdk
+#RUN apk add --update alpine-sdk
+
+RUN apt update
+RUN apt upgrade -y
 
 # Continue with your Dockerfile instructions
 WORKDIR /app
 COPY ./ibex-lib-master /app
+
+RUN chmod +x waf
 
 CMD ["tail", "-f", "/dev/null"]
 

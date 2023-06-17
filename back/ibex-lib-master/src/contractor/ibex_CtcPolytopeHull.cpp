@@ -8,38 +8,12 @@
 // Last update : Aug 01, 2018
 //============================================================================
 
-// cambiar ruta de ibex
-#include "/home/nico/Ibex/ibex-2.8.9/src/contractor/ann.cpp"
-
-
 #include "ibex_CtcPolytopeHull.h"
+
 #include "ibex_LinearizerFixed.h"
-#include "ibex_LinearizerXTaylor.h"
-#include <iostream>
-#include <fstream>
-#include <chrono>
-#include <list>
-
-
-//Libraries para red
-#include <cstdio>
-#include <algorithm>
-#include <vector>
-#include <cstdlib>
-#include <string>
-
-
-
-
-
-
-
-
 
 using namespace std;
-long double exec_simplex=0; 
-long double exec_line=0;
-long double exec_red=0;
+
 namespace ibex {
 
 namespace {
@@ -52,7 +26,7 @@ CtcPolytopeHull::CtcPolytopeHull(Linearizer& lr, int max_iter, int time_out, dou
 		Ctc(lr.nb_var()), lr(lr),
 		mylinearsolver(nb_var, LPSolver::Mode::Certified, eps, time_out, max_iter),
 		contracted_vars(BitSet::all(nb_var)), own_lr(false), primal_sols(2*nb_var, nb_var),
-		primal_sol_found(2*nb_var),P(0,0) {
+		primal_sol_found(2*nb_var) {
 
 }
 
@@ -60,7 +34,7 @@ CtcPolytopeHull::CtcPolytopeHull(const Matrix& A, const Vector& b, int max_iter,
 		Ctc(A.nb_cols()), lr(*new LinearizerFixed(A,b)),
 		mylinearsolver(nb_var, LPSolver::Mode::Certified, eps, time_out, max_iter),
 		contracted_vars(BitSet::all(nb_var)), own_lr(true), primal_sols(2*nb_var, nb_var),
-		primal_sol_found(2*nb_var),P(0,0) {
+		primal_sol_found(2*nb_var) {
 
 }
 
@@ -79,116 +53,24 @@ void CtcPolytopeHull::contract(IntervalVector& box) {
 
 void CtcPolytopeHull::contract(IntervalVector& box, ContractContext& context) {
 	primal_sol_found.clear();
-	LinearizerXTaylor * lr2 = dynamic_cast<LinearizerXTaylor*>(&lr);
+
 	if (box.is_unbounded()) return;
 
 	try {
-		using std::chrono::high_resolution_clock;
-   		using std::chrono::duration_cast;
-    	using std::chrono::duration;
-    	using std::chrono::milliseconds;
+		//returns the number of constraints in the linearized system
+		int cont = lr.linearize(box, mylinearsolver, context.prop);
 
-		auto p1 = high_resolution_clock::now();
-		int cont = lr2->linearize(box, mylinearsolver, context.prop); //returns the number of constraints in the linearized system
-		auto p2 = high_resolution_clock::now();
-		
-		duration<double, std::milli> line_ms = p2 - p1;
-		double temp2 =line_ms.count();
-		exec_line+=temp2;
-		
-		
+		//cout << "[polytope-hull] end of LR" << endl;
 
 		if (cont==-1) throw PolytopeHullEmptyBoxException();
 
 		if (cont==0) return;
-		//------------------------------Red neronal-----------------------------
-		auto red1=high_resolution_clock::now();
-		// ruta absoluta o relativa para la ejecución de la red
-		string path="/home/nico/codes/modelos/Modelo_MC-1_2M.model";
-	
-		vector<float> AXB_for_red;
-		for (int i=0;i<lr2->L_A.nb_rows();i++){
-					for (int k=0;k<lr2->L_A.nb_cols();k++){
-						AXB_for_red.push_back(lr2->L_A[i][k]);
-					}
-				}
-		for (int i=0;i<box.size();i++){
-					AXB_for_red.push_back(box[i].lb());
-					AXB_for_red.push_back(box[i].ub());
 
-			}
-		for (int i=0;i<lr2->L_b.size();i++){
-				AXB_for_red.push_back(lr2->L_b[i]);
-			}
+		optimizer(box);
 
-		float proba=Model_output(path,AXB_for_red,295);
-		// float proba=1.0;
-
-		auto red2= high_resolution_clock::now();
-		duration<double, std::milli> red_time_dif = red2 - red1;
-		double red_time =red_time_dif.count();
-		exec_red+=red_time;
-		//----------------------------Red neuronal-----------------------------------
-		IntervalVector aux =box; //copia de los intervalos
-		//---------------------------Simplex--------------------------------
-		
-		P.resize(0,0);
-		if (proba >= 0.5){
-			auto t1 = high_resolution_clock::now();
-			optimizer(box);
-			auto t2 = high_resolution_clock::now();
-			duration<double, std::milli> ms_double = t2 - t1;
-			double temp =ms_double.count();
-			exec_simplex+=temp;
-		}
-		
-		
-		
-	
-		//---------------------------Simplex--------------------------------
-		// if((rand() % 100) <=50 && false){
-		// 		int rows = box.size();
-				
-		// 		ibex::Vector diam_pre = aux.diam();
-		// 		ibex::Vector diam_post = box.diam();
-		// 		std::vector <double> diams;
-		// 		for (int i=0;i<rows;i++){
-		// 			double rate=((diam_pre[i]-diam_post[i])/diam_pre[i])*100;
-		// 			diams.push_back(rate);
-		// 		}
-		// 		//SALIDA DEL SIMPLEX
-		// 		std::ofstream Simplex_P;
-		// 		Simplex_P.open("test_results/DS_P.txt",std::ios_base::app);
-		// 		for (int i=0;i<P.nb_rows();i++){
-		// 			for (int k=0;k<P.nb_cols();k++){
-		// 				Simplex_P<<P[i][k]<<" ";
-		// 			}
-		// 		}
-		// 		Simplex_P<<endl;
-		// 		Simplex_P.close();
-
-		// 		std::ofstream intervals_file;
-		// 		intervals_file.open("test_results/intervals_change.txt",std::ios_base::app);
-		// 		for (int i=0;i<diams.size();i++){intervals_file<< diams[i] << " ";}
-		// 		intervals_file<<endl;
-		// 		intervals_file.close();
-
-		// 		std::ofstream AXB;
-		// 		AXB.open("test_results/AXB.txt",std::ios_base::app);
-		// 		for (int i=0;i<lr2->L_A.nb_rows();i++){
-		// 			for (int k=0;k<lr2->L_A.nb_cols();k++){
-		// 				AXB<<lr2->L_A[i][k]<<" ";
-		// 			}
-		// 		}
-		// 		for (int i=0;i<aux.size();i++){ AXB<<aux[i]<<" ";}
-		// 		for (int i=0;i<lr2->L_b.size();i++){AXB<<lr2->L_b[i]<<" ";}
-		// 		AXB<<endl;
-		// 		AXB.close();
-
-		// }
-		
-
-
+		//mylinearsolver.writeFile("LP.lp");
+		//system ("cat LP.lp");
+		//cout << "[polytope-hull] box after LR: " << box << endl;
 		mylinearsolver.clear_constraints();
 	}
 	catch(PolytopeHullEmptyBoxException& e) {
@@ -227,6 +109,7 @@ void CtcPolytopeHull::optimizer(IntervalVector& box) {
 
 	// Update the bounds the variables
 	mylinearsolver.set_bounds(box);
+
 	for(int ii=0; ii<(2*nb_var); ii++) {  // at most 2*n calls
 
 		int i= ii/2;
@@ -252,11 +135,6 @@ void CtcPolytopeHull::optimizer(IntervalVector& box) {
 				primal_sol_found.add(2*i);
 
 				if(opt.lb() > box[i].lb()) {
-					Vector dual_vector = mylinearsolver.not_proved_dual_sol();
-					P.resize(P.nb_rows()+1,dual_vector.size()-box.size());
-					for (int i = box.size() ; i < dual_vector.size() ; i++){
-						P[P.nb_rows()-1][i-box.size()] = -dual_vector[i];
-					}
 					box[i]=Interval(opt.lb(),box[i].ub());
 					mylinearsolver.set_bounds(i,box[i]);
 				}
@@ -312,11 +190,6 @@ void CtcPolytopeHull::optimizer(IntervalVector& box) {
 				primal_sol_found.add(2*i+1);
 
 				if (opt.ub() < box[i].ub()) {
-					Vector dual_vector = mylinearsolver.not_proved_dual_sol();
-					P.resize(P.nb_rows()+1,dual_vector.size()-box.size());
-					for (int i = box.size() ; i < dual_vector.size() ; i++){
-						P[P.nb_rows()-1][i-box.size()] = -dual_vector[i];
-					}
 					box[i] =Interval( box[i].lb(), opt.ub());
 					mylinearsolver.set_bounds(i,box[i]);
 				}
@@ -353,8 +226,6 @@ void CtcPolytopeHull::optimizer(IntervalVector& box) {
 		}
 		else break; // in case of stat==MAX_ITER  we do not recall the simplex on a another variable  (for efficiency reason)
 	}
-
-
 	delete[] inf_bound;
 	delete[] sup_bound;
 }
