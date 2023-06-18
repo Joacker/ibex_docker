@@ -15,9 +15,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt install -y \
      python-is-python3
-# ./waf distclean
 
-RUN apt install libeigen3-dev
+RUN apt install libeigen3-dev -y
 
 #RUN apk add --update alpine-sdk
 
@@ -30,32 +29,13 @@ COPY ./ibex-lib-master /app
 
 RUN chmod +x waf
 
+RUN ./waf configure --interval-lib=gaol --lp-lib=soplex \
+&& ./waf install
+
 CMD ["tail", "-f", "/dev/null"]
 
-# FROM ubuntu:latest
+# ./__build__/src/ibexopt benchs/optim/medium/alkylbis.bch --random-seed=1
+# ./waf distclean
 
-
-# RUN apt-get update && apt-get install -y \
-#     bash \
-#     g++ \
-#     gcc \
-#     flex \
-#     bison \
-#     python2-dev \
-#     make \
-#     build-essential 
-
-# RUN apt install -y \
-#     python-is-python3
-# #RUN apk add --update alpine-sdk
-
-# WORKDIR /app
-
-# COPY ./ibex-lib-master /app
-# #RUN ./waf configure --interval-lib=gaol --lp-lib=soplex \
-# #&& 
-
-# # ./__build__/src/ibexopt benchs/optim/medium/alkylbis.bch --random-seed=1
-
-# # Mantener el contenedor en ejecución
+# Mantener el contenedor en ejecución
 # CMD ["tail", "-f", "/dev/null"]

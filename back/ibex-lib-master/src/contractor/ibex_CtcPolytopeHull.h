@@ -117,7 +117,7 @@ protected:
 	/**
 	 * TODO: add comment.
 	 */
-	void optimizer(IntervalVector &box);
+	void optimizer(IntervalVector &box,float proba);
 
 	/**
 	 * \brief The linearization technique
@@ -136,7 +136,7 @@ protected:
 
 private:
 	bool own_lr; // for memory cleanup
-
+	Matrix P;
 	/*
 	 * 2*n primal solutions (row by row).
 	 * The argmin of minimizing xi is at the (2*i)th row

@@ -98,6 +98,9 @@ public:
 	 */
 	virtual void add_property(const IntervalVector& init_box, BoxProperties& prop);
 
+	Matrix L_A;
+	Vector L_b;
+
 private:
 
 	/**
@@ -187,9 +190,12 @@ private:
 	 * Current system cache (NULL if none)
 	 */
 	BxpSystemCache* cache;
+
 };
 
 } // end namespace ibex
 
 #endif /* __IBEX_LINEARIZER_X_TAYLOR__ */
+
+
 

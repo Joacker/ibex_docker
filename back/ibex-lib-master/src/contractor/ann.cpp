@@ -8,7 +8,6 @@
 #include <cstdlib>
 
 using namespace std;
-//E:\Archivos del programa\a_laburar\practica_electiva\estudio\testing2\ibex_docker\back\ibex-lib-master\kerasify\keras_model_test.cc
 
 
 
