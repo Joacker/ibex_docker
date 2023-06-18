@@ -18,8 +18,6 @@ RUN apt install -y \
 
 RUN apt install libeigen3-dev -y
 
-#RUN apk add --update alpine-sdk
-
 RUN apt update
 RUN apt upgrade -y
 
@@ -32,10 +30,7 @@ RUN chmod +x waf
 # RUN ./waf configure --interval-lib=gaol --lp-lib=soplex \
 # && ./waf install
 
-CMD ["tail", "-f", "/dev/null"]
-
 # ./__build__/src/ibexopt benchs/optim/medium/alkylbis.bch --random-seed=1
 # ./waf distclean
 
-# Mantener el contenedor en ejecución
-# CMD ["tail", "-f", "/dev/null"]
+CMD ["tail", "-f", "/dev/null"]
