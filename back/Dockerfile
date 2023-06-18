@@ -29,8 +29,8 @@ COPY ./ibex-lib-master /app
 
 RUN chmod +x waf
 
-RUN ./waf configure --interval-lib=gaol --lp-lib=soplex \
-&& ./waf install
+# RUN ./waf configure --interval-lib=gaol --lp-lib=soplex \
+# && ./waf install
 
 CMD ["tail", "-f", "/dev/null"]
 

@@ -18,5 +18,5 @@ services:
     #make a container run in background
     volumes:
       - ./back/ibex-lib-master:/app
-      - ./back/ibex-lib-master/results:/app/results
+      - ./results:/app/results
     command: /bin/bash -c "while true; do sleep 1; done"
