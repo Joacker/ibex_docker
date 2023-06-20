@@ -28,4 +28,5 @@ services:
     container_name: data_process_service
     ports:
       - 82:8000
-    
+    volumes:
+      - ./data:/app
