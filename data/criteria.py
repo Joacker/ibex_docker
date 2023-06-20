@@ -2,7 +2,7 @@ import os
 import numpy as np
 import re
 from statistics import mean
-from data.get_data import *
+from get_data import *
 
 #Criteria: devuelve 1 si existe la matriz P
 def check_if_P(path,n):

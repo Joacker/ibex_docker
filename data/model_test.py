@@ -25,7 +25,7 @@ def model_predict(model_path,sample): #for predicting a single sample
         
 def model_testing(model_path,results_path,samples): #for predicting a dataset
     input=read_data_AXB_n(results_path,samples)
-    print('input',input[0])
+    #print('input',input[0])
 
     model=load_model(model_path)
 
@@ -41,6 +41,6 @@ def model_testing(model_path,results_path,samples): #for predicting a dataset
 
 
 results="/app/results"
-answer=model_testing("/app/models/mc-4_linear_2m.h5",results,10000)
+answer=model_testing("/app/models/keras_model.h5",results,10000)
 for i in answer:
     print(i)

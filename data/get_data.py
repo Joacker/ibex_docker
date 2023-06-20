@@ -23,13 +23,16 @@ def pad_list_with_zeros(lists):
 def read_data_AXB_n(path,n):
     aux=[]
     with open(path+'/AXB.txt','r') as file:
-        head= [next(file) for x in range(n)]
-        for line in head:
-            if line == '\n': break
-            # list=re.findall("(?<=[AZaz])?(?!\d*=)[0-9.+-]+",line) #old regex. Error with letter e
-            list=re.findall("(?<=[AZaz])?(?!\d*=)[eE0-9.+-]+", line)
-            list= [round(float(i),7) for i in list]
-            aux.append(list)
+        try:
+            head= [next(file) for x in range(n)]
+            for line in head:
+                if line == '\n': break
+                # list=re.findall("(?<=[AZaz])?(?!\d*=)[0-9.+-]+",line) #old regex. Error with letter e
+                list=re.findall("(?<=[AZaz])?(?!\d*=)[eE0-9.+-]+", line)
+                list= [round(float(i),7) for i in list]
+                aux.append(list)
+        except StopIteration:
+            head = None
     return aux  
 
 def read_data_P_n(path,n):
