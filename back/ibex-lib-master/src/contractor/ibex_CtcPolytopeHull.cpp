@@ -26,7 +26,9 @@
 #include <vector>
 #include <cstdlib>
 #include <string>
-
+#include <sstream>
+//include para time
+#include <ctime>
 
 
 
@@ -46,6 +48,14 @@ namespace {
 class PolytopeHullEmptyBoxException { };
 
 }
+
+// que la variable también almacena un peso y un tiempo de ejecución
+struct variable {
+	int index;
+	double value;
+	double weight;
+	double time;
+};
 
 CtcPolytopeHull::CtcPolytopeHull(Linearizer& lr, int max_iter, int time_out, double eps) :
 		Ctc(lr.nb_var()), lr(lr),
@@ -138,7 +148,7 @@ void CtcPolytopeHull::contract(IntervalVector& box, ContractContext& context) {
 		exec_simplex+=temp;
 	
 		//---------------------------Simplex--------------------------------
-		if((rand() % 100) <=50 && true){
+		if((rand() % 100) <=101 && true){
 				int rows = box.size();
 				
 				ibex::Vector diam_pre = aux.diam();
@@ -201,9 +211,13 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 	Interval opt(0.0);
 	int* inf_bound = new int[nb_var]; // indicator inf_bound = 1 means the inf bound is feasible or already contracted, call to simplex useless (cf Baharev)
 	int* sup_bound = new int[nb_var]; // indicator sup_bound = 1 means the sup bound is feasible or already contracted, call to simplex useless
-
+	//puedes evaluar importancia del problema en fuinción de una dificultad a partir de una demora de tiempo como criterio de parada
+	// de que otra forma puedo contraer las variables que no son importantes
+	//puedes evaluar la importancia de las variables en función de la cantidad de veces que se contraen
+	//puedes evaluar la importancia de las variables en función de la cantidad de veces que se contraen y el tiempo que se demora en contraerlas
+	// y donde de iría esa última idea
 	for (int i=0; i<nb_var; i++) {
-
+		//puedes evaluar la importancia de las variables en función de la cantidad de veces que se contraen y el tiempo que se demora en contraerlas
 		if (contracted_vars[i]) {
 			inf_bound[i]=0;
 			sup_bound[i]=0;
@@ -216,10 +230,20 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 	int nexti=-1;   // the next variable to be contracted
 	int infnexti=0; // the bound to be contracted contract  infnexti=0 for the lower bound, infnexti=1 for the upper bound
 	LPSolver::Status stat=LPSolver::Status::Unknown;
-
-	// Update the bounds the variables
+	cout << "[polytope-hull]->[optimize] box before simplex: " << box << endl;
+	cout << "[polytope-hull]->[optimize] nb_var=" << nb_var << endl;
+	// try {
+		
+	// 	variable = new int[nb_var];
+	// 	for (int i=0; i<nb_var; i++){
+	// 		variable[i]=i;
+	// 	} 
+	// }
+	// catch (std::bad_alloc& ba) {
+	// 	cerr << "bad_alloc caught: " << ba.what() << endl;
+	// }
 	mylinearsolver.set_bounds(box);
-	if (proba >= 0.5){
+	if (proba >= 0.0){
 	for(int ii=0; ii<(2*nb_var); ii++) {  // at most 2*n calls
 
 		int i= ii/2;
@@ -294,7 +318,7 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 			//cout << "[polytope-hull]->[optimize] simplex for right bound returns stat=" << stat << endl;
 			if( stat == LPSolver::Status::OptimalProved) {
 				opt = -mylinearsolver.minimum();
-				//std::cout << "opt=" << opt << endl;
+				std::cout << "opt=" << opt << endl;
 				if(opt.ub() <box[i].lb()) {
 					delete[] inf_bound;
 					delete[] sup_bound;

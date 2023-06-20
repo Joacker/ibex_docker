@@ -569,7 +569,7 @@ const char* white() {
 }
 
 }
-
+// como identificar si el problema es hard o medium o easy a partir de la precision
 void Optimizer::report() {
 	cout<<"Tiempo de linealizacion: "<<exec_line/1000<<endl;
 	// tiempo ejecucion de red
@@ -579,6 +579,16 @@ void Optimizer::report() {
 	double rel_prec=get_obj_rel_prec();
 	// precicion a la 1 ^ -3
 	cout <<"Precision a la -3, acotamiento del box: "<<rel_prec<<endl;
+	// como identificar si el problema es hard o medium o easy a partir de la precision
+	// if(rel_prec<0.001){
+	// 	cout<<"El problema es hard"<<endl;
+	// }
+	// else if(rel_prec<0.01){
+	// 	cout<<"El problema es medium"<<endl;
+	// }
+	// else{
+	// 	cout<<"El problema es easy"<<endl;
+	// }
 	// tiempo de ejecucion
 	cout<<"Tiempo de ejecucion: "<<time<<endl;
 	// numero de nodos

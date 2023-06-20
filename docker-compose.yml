@@ -20,3 +20,12 @@ services:
       - ./back/ibex-lib-master:/app
       - ./results:/app/results
     command: /bin/bash -c "while true; do sleep 1; done"
+
+  
+  data_process_service:
+    image: data_process_service
+    build: ./data
+    container_name: data_process_service
+    ports:
+      - 82:8000
+    
