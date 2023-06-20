@@ -30,3 +30,5 @@ services:
       - 82:8000
     volumes:
       - ./data:/app
+      - ./results:/app/results
+      - ./models:/app/models
