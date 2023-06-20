@@ -1,5 +1,5 @@
 keras
-numpy==1.16.4
+numpy==1.20
 pandas==0.24.2
 scikit-learn==0.21.2
-tensorflow==1.14.0
+tensorflow==2.8.0rc1
