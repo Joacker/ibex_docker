@@ -1,7 +1,7 @@
 from keras.utils.np_utils import normalize
 import numpy as np
-from data.get_data import *
-from data.criteria import *
+from get_data import *
+from criteria import *
 from keras.models import load_model
 #from tensorflow import keras
 
@@ -40,7 +40,7 @@ def model_testing(model_path,results_path,samples): #for predicting a dataset
     return answer
 
 
-results="/results"
-answer=model_testing("./models/mc-4_linear_2m.h5",results,10000)
+results="/app/results"
+answer=model_testing("/app/models/mc-4_linear_2m.h5",results,10000)
 for i in answer:
     print(i)

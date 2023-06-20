@@ -10,9 +10,9 @@ seed_Final=1
 timeout=3600
 precision=0.001
 criteria="model_mc1_2m_threshold_05"
-path_to_benchs="/home/nico/codes/benchmarks/experiment_set.txt"
-short='/home/nico/codes/benchmarks/short.txt'
-ibexopt="/home/nico/Ibex/ibex-2.8.9/__build__/src/ibexopt"
+path_to_benchs="/app/codes/benchmarks/experiment_set.txt"
+short='/app/codes/benchmarks/short.txt'
+ibexopt="/app/Ibex/ibex-2.8.9/__build__/src/ibexopt"
 csv_file="benchmarks/MC-2/benchmark_{0}.csv".format(criteria)
 # ---------------------------------------------
 # print("Number of cpu : ", multiprocessing.cpu_count())
