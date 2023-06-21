@@ -27,9 +27,10 @@
 #include <cstdlib>
 #include <string>
 #include <sstream>
+#include <cstdlib>
 //include para time
 #include <ctime>
-
+#include <cmath>
 
 
 
@@ -41,6 +42,7 @@ using namespace std;
 long double exec_simplex=0; 
 long double exec_line=0;
 long double exec_red=0;
+long double num_variables=0;
 namespace ibex {
 
 namespace {
@@ -49,13 +51,6 @@ class PolytopeHullEmptyBoxException { };
 
 }
 
-// que la variable también almacena un peso y un tiempo de ejecución
-struct variable {
-	int index;
-	double value;
-	double weight;
-	double time;
-};
 
 CtcPolytopeHull::CtcPolytopeHull(Linearizer& lr, int max_iter, int time_out, double eps) :
 		Ctc(lr.nb_var()), lr(lr),
@@ -113,7 +108,7 @@ void CtcPolytopeHull::contract(IntervalVector& box, ContractContext& context) {
 		//------------------------------Red neronal-----------------------------
 		auto red1=high_resolution_clock::now();
 		string path="/app/codes/modelos/Modelo_MC-1_6M.model";
-	
+		
 		vector<float> AXB_for_red;
 		for (int i=0;i<lr2->L_A.nb_rows();i++){
 					for (int k=0;k<lr2->L_A.nb_cols();k++){
@@ -232,17 +227,27 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 	LPSolver::Status stat=LPSolver::Status::Unknown;
 	cout << "[polytope-hull]->[optimize] box before simplex: " << box << endl;
 	cout << "[polytope-hull]->[optimize] nb_var=" << nb_var << endl;
-	// try {
-		
-	// 	variable = new int[nb_var];
-	// 	for (int i=0; i<nb_var; i++){
-	// 		variable[i]=i;
-	// 	} 
-	// }
-	// catch (std::bad_alloc& ba) {
-	// 	cerr << "bad_alloc caught: " << ba.what() << endl;
-	// }
 	mylinearsolver.set_bounds(box);
+	
+	int size_inf_bound = sizeof(inf_bound) / sizeof(inf_bound[0]);
+    int size_sup_bound = sizeof(sup_bound) / sizeof(sup_bound[0]);
+    // Crear el array de probas
+    float probas[size_inf_bound];
+
+    // Establecer la semilla como un número entero (por ejemplo, 123)
+    srand(123);
+
+    // Llenar el array de probas con valores aleatorios entre 0.0 y 1.0
+    for (int i = 0; i < size_inf_bound; i++) {
+        probas[i] = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+        // Redondear los decimales a 3 cifras después de la coma
+        probas[i] = (round(probas[i] * 1000.0) / 1000.0);
+		// quiero que el resultado quede de la siguiente forma 0.123
+		cout<<"probas: "<<probas[i]<<endl;
+    }
+
+	
+	cout<<"probas: "<<probas[0]<<endl;
 	if (proba >= 0.0){
 	for(int ii=0; ii<(2*nb_var); ii++) {  // at most 2*n calls
 
