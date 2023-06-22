@@ -24,7 +24,7 @@ def enviar_cat_hard():
         mensaje = {
             "timestamp": int(time.time()),
             "id": generar_id(),
-            "temperatura": temperatura
+            "hard": temperatura
         }
         json_mensaje = dumps(mensaje).encode('utf-8')
         productor.send(topic, json_mensaje)
@@ -38,7 +38,7 @@ def enviar_cat_medium():
         mensaje = {
             "timestamp": int(time.time()),
             "id": generar_id(),
-            "porcentaje_humedad": humedad
+            "medium": humedad
         }
         json_mensaje = dumps(mensaje).encode('utf-8')
         productor.send(topic, json_mensaje)
@@ -52,7 +52,7 @@ def enviar_cat_easy():
         mensaje = {
             "timestamp": int(time.time()),
             "id": generar_id(),
-            "posicion": posicion
+            "easy": posicion
         }
         json_mensaje = dumps(mensaje).encode('utf-8')
         productor.send(topic, json_mensaje)
