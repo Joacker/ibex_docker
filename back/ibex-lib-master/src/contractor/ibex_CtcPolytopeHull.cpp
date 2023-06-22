@@ -27,7 +27,6 @@
 #include <cstdlib>
 #include <string>
 #include <sstream>
-#include <cstdlib>
 //include para time
 #include <ctime>
 #include <cmath>

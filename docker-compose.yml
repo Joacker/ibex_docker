@@ -19,7 +19,6 @@ services:
     volumes:
       - ./back/ibex-lib-master:/app
       - ./results:/app/results
-      - ./benchmarks:/app/benchs
     command: /bin/bash -c "while true; do sleep 1; done"
 
   
