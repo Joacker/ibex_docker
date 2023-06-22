@@ -17,8 +17,8 @@ productor = KafkaProducer(bootstrap_servers=[servidores_bootstrap])
 def generar_id():
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=random.randint(1, 20)))
 
-def enviar_temperatura():
-    topic = topic_temperatura
+def enviar_cat_hard():
+    topic = topic_hard
     while True:
         temperatura = round(random.uniform(10, 30), 1)
         mensaje = {
@@ -31,8 +31,8 @@ def enviar_temperatura():
         print('Enviando JSON:', json_mensaje)
         time.sleep(3)
 
-def enviar_porcentaje_humedad():
-    topic = topic_humedad
+def enviar_cat_medium():
+    topic = topic_medium
     while True:
         humedad = random.randint(0, 100)
         mensaje = {
@@ -45,8 +45,8 @@ def enviar_porcentaje_humedad():
         print('Enviando JSON:', json_mensaje)
         time.sleep(3)
 
-def enviar_posicion():
-    topic = topic_posicion
+def enviar_cat_easy():
+    topic = topic_easy
     while True:
         posicion = random.randint(0, 10)
         mensaje = {
@@ -67,9 +67,7 @@ if __name__ == "__main__":
     funciones_envio = [
         enviar_temperatura,
         enviar_porcentaje_humedad,
-        enviar_posicion,
-        enviar_color,
-        enviar_peso
+        enviar_posicion
     ]
 
     threads = []
