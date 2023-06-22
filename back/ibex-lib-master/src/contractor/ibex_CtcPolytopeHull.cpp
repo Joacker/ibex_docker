@@ -35,13 +35,13 @@
 
 
 
-
-
 using namespace std;
 long double exec_simplex=0; 
 long double exec_line=0;
 long double exec_red=0;
-long double num_variables=0;
+
+
+
 namespace ibex {
 
 namespace {
@@ -224,8 +224,8 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 	int nexti=-1;   // the next variable to be contracted
 	int infnexti=0; // the bound to be contracted contract  infnexti=0 for the lower bound, infnexti=1 for the upper bound
 	LPSolver::Status stat=LPSolver::Status::Unknown;
-	cout << "[polytope-hull]->[optimize] box before simplex: " << box << endl;
-	cout << "[polytope-hull]->[optimize] nb_var=" << nb_var << endl;
+	//cout << "[polytope-hull]->[optimize] box before simplex: " << box << endl;
+	//cout << "[polytope-hull]->[optimize] nb_var=" << nb_var << endl;
 	mylinearsolver.set_bounds(box);
 	
 	int size_inf_bound = sizeof(inf_bound) / sizeof(inf_bound[0]);
@@ -242,11 +242,11 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
         // Redondear los decimales a 3 cifras después de la coma
         probas[i] = (round(probas[i] * 1000.0) / 1000.0);
 		// quiero que el resultado quede de la siguiente forma 0.123
-		cout<<"probas: "<<probas[i]<<endl;
+		//cout<<"probas: "<<probas[i]<<endl;
     }
 
 	
-	cout<<"probas: "<<probas[0]<<endl;
+	//cout<<"probas: "<<probas[0]<<endl;
 	if (proba >= 0.0){
 	for(int ii=0; ii<(2*nb_var); ii++) {  // at most 2*n calls
 
@@ -322,7 +322,7 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 			//cout << "[polytope-hull]->[optimize] simplex for right bound returns stat=" << stat << endl;
 			if( stat == LPSolver::Status::OptimalProved) {
 				opt = -mylinearsolver.minimum();
-				std::cout << "opt=" << opt << endl;
+				//std::cout << "opt=" << opt << endl;
 				if(opt.ub() <box[i].lb()) {
 					delete[] inf_bound;
 					delete[] sup_bound;

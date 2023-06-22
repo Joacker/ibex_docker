@@ -1,6 +1,28 @@
 version: '3.7'
 
 services:
+  
+  zookeeper:
+    image: "bitnami/zookeeper:latest"
+    restart: always
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+  
+  kafka:
+    image: "bitnami/kafka:latest"
+    restart: always
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+
   app:
     image: app
     build: ./back
@@ -22,10 +44,10 @@ services:
     command: /bin/bash -c "while true; do sleep 1; done"
 
   
-  data_process_service:
-    image: data_process_service
+  data:
+    image: data
     build: ./data
-    container_name: data_process_service
+    container_name: data
     ports:
       - 82:8000
     volumes:
@@ -33,3 +55,5 @@ services:
       - ./results:/app/results
       - ./models:/app/models
       - ./back/ibex-lib-master/benchs:/app/benchmarks
+
+  

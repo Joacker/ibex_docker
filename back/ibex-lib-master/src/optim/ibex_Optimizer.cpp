@@ -20,7 +20,7 @@
 extern long double exec_simplex; 
 extern long double exec_line;
 extern long double exec_red;
-
+string name_file = "";
 
 using namespace std;
 
@@ -307,6 +307,7 @@ Optimizer::Status Optimizer::optimize(const CovOptimData& data, double obj_init_
 
 Optimizer::Status Optimizer::optimize(const char* cov_file, double obj_init_bound) {
 	CovOptimData data(cov_file);
+	name_file=cov_file;
 	start(data, obj_init_bound);
 	return optimize();
 }
@@ -592,7 +593,7 @@ void Optimizer::report() {
 	cout<<"Tiempo de ejecucion: "<<time<<endl;
 	// numero de nodos
 	cout<<"Numero de nodos visitados: "<<nb_cells<<endl;
-	
+	cout<<"Nombre archivo: "<<name_file<<endl;
 	
 	// double abs_prec=get_obj_abs_prec();
 	
