@@ -65,9 +65,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     funciones_envio = [
-        enviar_temperatura,
-        enviar_porcentaje_humedad,
-        enviar_posicion
+        enviar_cat_hard,
+        enviar_cat_medium,
+        enviar_cat_easy
     ]
 
     threads = []
