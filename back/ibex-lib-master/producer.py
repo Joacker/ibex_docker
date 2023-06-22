@@ -7,11 +7,10 @@ import random
 import string
 
 servidores_bootstrap = 'kafka:9092'
-topic_temperatura = 'temperatura'
-topic_humedad = 'porcentaje_humedad'
-topic_posicion = 'posicion'
-topic_color = 'color'
-topic_peso = 'peso'
+topic_hard = 'hard'
+topic_medium = 'medium'
+topic_easy = 'easy'
+
 
 productor = KafkaProducer(bootstrap_servers=[servidores_bootstrap])
 
@@ -54,35 +53,6 @@ def enviar_posicion():
             "timestamp": int(time.time()),
             "id": generar_id(),
             "posicion": posicion
-        }
-        json_mensaje = dumps(mensaje).encode('utf-8')
-        productor.send(topic, json_mensaje)
-        print('Enviando JSON:', json_mensaje)
-        time.sleep(3)
-
-def enviar_color():
-    topic = topic_color
-    while True:
-        colores = ["blanco", "rojo", "azul", "naranjo", "amarillo", "verde_claro", "verde_oscuro", "lila", "blanco"]
-        color = random.choice(colores)
-        mensaje = {
-            "timestamp": int(time.time()),
-            "id": generar_id(),
-            "color": color
-        }
-        json_mensaje = dumps(mensaje).encode('utf-8')
-        productor.send(topic, json_mensaje)
-        print('Enviando JSON:', json_mensaje)
-        time.sleep(3)
-
-def enviar_peso():
-    topic = topic_peso
-    while True:
-        peso = round(random.uniform(0, 100), 2)
-        mensaje = {
-            "timestamp": int(time.time()),
-            "id": generar_id(),
-            "peso": peso
         }
         json_mensaje = dumps(mensaje).encode('utf-8')
         productor.send(topic, json_mensaje)
