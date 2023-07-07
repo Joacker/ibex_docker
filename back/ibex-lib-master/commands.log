@@ -1,36 +1,9 @@
 
 ************************ setup ************************
-  file loaded:		benchs/optim/medium/alkylbis.bch
+  file loaded:		benchs/optim/hard/chembis.bch
   random seed:		1
-  output COV file:	benchs/optim/medium/alkylbis.cov
+  output COV file:	benchs/optim/hard/chembis.cov
 *******************************************************
 
 running............
 
-Tiempo de linealizacion: 0.0213045580001
-Tiempo de ejecucion de la red: 0.424773800001
-Tiempo de ejecucion de simplex: 0.154037180001
-Precision a la -3, acotamiento del box: 2.95320958552e-05
-Tiempo de ejecucion: 0.545442000001
-Numero de nodos visitados: 62
-Nombre archivo: 
- results written in benchs/optim/medium/alkylbis.cov
- (old file saved in benchs/optim/medium/alkylbis.cov~)
-
-************************ setup ************************
-  file loaded:		benchs/optim/medium/alkylbis.bch
-  random seed:		1
-  output COV file:	benchs/optim/medium/alkylbis.cov
-*******************************************************
-
-running............
-
-Tiempo de linealizacion: 0.0204551250001
-Tiempo de ejecucion de la red: 0.350243264001
-Tiempo de ejecucion de simplex: 0.146289318001
-Precision a la -3, acotamiento del box: 2.95320958552e-05
-Tiempo de ejecucion: 0.530341000001
-Numero de nodos visitados: 62
-Nombre archivo: 
- results written in benchs/optim/medium/alkylbis.cov
- (old file saved in benchs/optim/medium/alkylbis.cov~)

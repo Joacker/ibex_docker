@@ -593,8 +593,9 @@ void Optimizer::report() {
 	cout<<"Tiempo de ejecucion: "<<time<<endl;
 	// numero de nodos
 	cout<<"Numero de nodos visitados: "<<nb_cells<<endl;
-	cout<<"Nombre archivo: "<<name_file<<endl;
-	
+	cout<<"Numero de variables de entrada: "<<11<<endl;
+	cout<<"Precicion a la -3 considerando las variables de entrada: "<<rel_prec/11<<endl;
+	cout<<"Preobabilidad aplicada sobre la red es de: "<<0.5<<endl;
 	// double abs_prec=get_obj_abs_prec();
 	
 	

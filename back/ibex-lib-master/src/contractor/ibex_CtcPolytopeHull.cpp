@@ -18,7 +18,7 @@
 #include <fstream>
 #include <chrono>
 #include <list>
-
+#include <ctime>
 
 //Libraries para red
 #include <cstdio>
@@ -26,10 +26,10 @@
 #include <vector>
 #include <cstdlib>
 #include <string>
-#include <sstream>
-//include para time
-#include <ctime>
-#include <cmath>
+
+
+
+
 
 
 
@@ -39,9 +39,6 @@ using namespace std;
 long double exec_simplex=0; 
 long double exec_line=0;
 long double exec_red=0;
-
-
-
 namespace ibex {
 
 namespace {
@@ -49,7 +46,6 @@ namespace {
 class PolytopeHullEmptyBoxException { };
 
 }
-
 
 CtcPolytopeHull::CtcPolytopeHull(Linearizer& lr, int max_iter, int time_out, double eps) :
 		Ctc(lr.nb_var()), lr(lr),
@@ -107,7 +103,7 @@ void CtcPolytopeHull::contract(IntervalVector& box, ContractContext& context) {
 		//------------------------------Red neronal-----------------------------
 		auto red1=high_resolution_clock::now();
 		string path="/app/codes/modelos/Modelo_MC-1_6M.model";
-		
+	
 		vector<float> AXB_for_red;
 		for (int i=0;i<lr2->L_A.nb_rows();i++){
 					for (int k=0;k<lr2->L_A.nb_cols();k++){
@@ -142,7 +138,7 @@ void CtcPolytopeHull::contract(IntervalVector& box, ContractContext& context) {
 		exec_simplex+=temp;
 	
 		//---------------------------Simplex--------------------------------
-		if((rand() % 100) <=101 && true){
+		if((rand() % 100) <=50 && true){
 				int rows = box.size();
 				
 				ibex::Vector diam_pre = aux.diam();
@@ -205,13 +201,9 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 	Interval opt(0.0);
 	int* inf_bound = new int[nb_var]; // indicator inf_bound = 1 means the inf bound is feasible or already contracted, call to simplex useless (cf Baharev)
 	int* sup_bound = new int[nb_var]; // indicator sup_bound = 1 means the sup bound is feasible or already contracted, call to simplex useless
-	//puedes evaluar importancia del problema en fuinción de una dificultad a partir de una demora de tiempo como criterio de parada
-	// de que otra forma puedo contraer las variables que no son importantes
-	//puedes evaluar la importancia de las variables en función de la cantidad de veces que se contraen
-	//puedes evaluar la importancia de las variables en función de la cantidad de veces que se contraen y el tiempo que se demora en contraerlas
-	// y donde de iría esa última idea
+
 	for (int i=0; i<nb_var; i++) {
-		//puedes evaluar la importancia de las variables en función de la cantidad de veces que se contraen y el tiempo que se demora en contraerlas
+
 		if (contracted_vars[i]) {
 			inf_bound[i]=0;
 			sup_bound[i]=0;
@@ -224,30 +216,10 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 	int nexti=-1;   // the next variable to be contracted
 	int infnexti=0; // the bound to be contracted contract  infnexti=0 for the lower bound, infnexti=1 for the upper bound
 	LPSolver::Status stat=LPSolver::Status::Unknown;
-	//cout << "[polytope-hull]->[optimize] box before simplex: " << box << endl;
-	//cout << "[polytope-hull]->[optimize] nb_var=" << nb_var << endl;
+
+	// Update the bounds the variables
 	mylinearsolver.set_bounds(box);
-	
-	int size_inf_bound = sizeof(inf_bound) / sizeof(inf_bound[0]);
-    int size_sup_bound = sizeof(sup_bound) / sizeof(sup_bound[0]);
-    // Crear el array de probas
-    float probas[size_inf_bound];
-
-    // Establecer la semilla como un número entero (por ejemplo, 123)
-    srand(123);
-
-    // Llenar el array de probas con valores aleatorios entre 0.0 y 1.0
-    for (int i = 0; i < size_inf_bound; i++) {
-        probas[i] = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-        // Redondear los decimales a 3 cifras después de la coma
-        probas[i] = (round(probas[i] * 1000.0) / 1000.0);
-		// quiero que el resultado quede de la siguiente forma 0.123
-		//cout<<"probas: "<<probas[i]<<endl;
-    }
-
-	
-	//cout<<"probas: "<<probas[0]<<endl;
-	if (proba >= 0.0){
+	if (proba >= 0.2){
 	for(int ii=0; ii<(2*nb_var); ii++) {  // at most 2*n calls
 
 		int i= ii/2;
@@ -299,6 +271,8 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 			}
 
 			else if (stat == LPSolver::Status::Unknown) {
+				clock_t t1;
+				t1=clock();
 				int next=-1;
 				for (int j=0;j<nb_var;j++) {
 					if (inf_bound[j]==0) {
@@ -310,7 +284,7 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 						break;
 					}
 				}
-				if (next==-1)  break;
+				if (next==-1 || ((float)t1)/CLOCKS_PER_SEC > 0.01)  break;
 			}
 
 		}
@@ -358,6 +332,8 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 			}
 
 			else if (stat == LPSolver::Status::Unknown) {
+				clock_t t2;
+				t2=clock();
 				int next=-1;
 				for (int j=0;j<nb_var;j++) {
 					if (inf_bound[j]==0) {
@@ -369,7 +345,7 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 						break;
 					}
 				}
-				if (next==-1) break;
+				if (next==-1 || ((float)t2)/CLOCKS_PER_SEC > 0.01) break;
 			}
 		}
 		else break; // in case of stat==MAX_ITER  we do not recall the simplex on a another variable  (for efficiency reason)
@@ -395,16 +371,16 @@ bool CtcPolytopeHull::choose_next_variable(IntervalVector & box, int & nexti, in
 	double prec_bound = 1.e-8; // relative precision for the indicators      :  compatibility for testing  BNE
 	double delta=1.e100;
 	double deltaj=delta;
-
+	clock_t t;
+	t = clock();
 	for (int j=0; j<nb_var; j++)	{
-
 		if (inf_bound[j]==0) {
 			deltaj= fabs(primal_solution[j]- box[j].lb());
 			if ((fabs (box[j].lb()) < 1 && deltaj < prec_bound) ||
-					(fabs (box[j].lb()) >= 1 && fabs (deltaj /(box[j].lb())) < prec_bound))	{
+					(fabs (box[j].lb()) >= 1 && fabs (deltaj /(box[j].lb())) < prec_bound) && ((float)t)/CLOCKS_PER_SEC < 0.01)	{
 				inf_bound[j]=1;
 			}
-			if (inf_bound[j]==0 && deltaj < delta) 	{
+			if (inf_bound[j]==0 && deltaj < delta && ((float)t)/CLOCKS_PER_SEC < 0.01) 	{
 				nexti=j; infnexti=0;delta=deltaj; found =true;
 			}
 		}
@@ -413,15 +389,16 @@ bool CtcPolytopeHull::choose_next_variable(IntervalVector & box, int & nexti, in
 			deltaj = fabs (primal_solution[j]- box[j].ub());
 
 
-			if ((fabs (box[j].ub()) < 1 && deltaj < prec_bound) 	||
-					(fabs (box[j].ub()) >= 1 && fabs (deltaj/(box[j].ub())) < prec_bound)) {
+			if ((fabs (box[j].ub()) < 1 && deltaj < prec_bound) ||
+					(fabs (box[j].ub()) >= 1 && fabs (deltaj/(box[j].ub())) < prec_bound) && ((float)t)/CLOCKS_PER_SEC < 0.01) {
 				sup_bound[j]=1;
 			}
-			if (sup_bound[j]==0 && deltaj < delta) {
+			if (sup_bound[j]==0 && deltaj < delta  && ((float)t)/CLOCKS_PER_SEC < 0.01) {
 				nexti=j; infnexti=1;delta=deltaj;  found =true;
 			}
 
 		}
+		
 
 
 	}

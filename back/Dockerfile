@@ -36,7 +36,7 @@ RUN chmod +x waf
 # && ./waf install
 
 # ./__build__/src/ibexopt benchs/optim/medium/alkylbis.bch --random-seed=1
-# ./__build__/src/ibexopt benchs/optim/medium/alkylbis.bch --random-seed=1 >> commands.log
+# ./__build__/src/ibexopt benchs/optim/hard/chembis.bch --random-seed=1 >> commands.log
 # ./waf distclean
 
 CMD ["tail", "-f", "/dev/null"]
