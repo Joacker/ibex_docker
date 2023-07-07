@@ -219,7 +219,7 @@ void CtcPolytopeHull::optimizer(IntervalVector& box, float proba) {
 
 	// Update the bounds the variables
 	mylinearsolver.set_bounds(box);
-	if (proba >= 0.2){
+	if (proba >= 0.5){
 	for(int ii=0; ii<(2*nb_var); ii++) {  // at most 2*n calls
 
 		int i= ii/2;

@@ -69,23 +69,23 @@ if __name__ == "__main__":
             #productor.send('commands', i.encode('utf-8'))
             print('Enviando JSON:', i)
             #time.sleep(3)
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument("num_threads", type=int, help="Número de hilos a crear")
-    # args = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("num_threads", type=int, help="Número de hilos a crear")
+    args = parser.parse_args()
 
-    # funciones_envio = [
-    #     enviar_cat_hard,
-    #     enviar_cat_medium,
-    #     enviar_cat_easy
-    # ]
+    funciones_envio = [
+        enviar_cat_hard,
+        enviar_cat_medium,
+        enviar_cat_easy
+    ]
 
-    # threads = []
-    # for _ in range(args.num_threads):
-    #     funcion_envio = random.choice(funciones_envio)
-    #     t = threading.Thread(target=funcion_envio)
-    #     t.start()
-    #     threads.append(t)
+    threads = []
+    for _ in range(args.num_threads):
+        funcion_envio = random.choice(funciones_envio)
+        t = threading.Thread(target=funcion_envio)
+        t.start()
+        threads.append(t)
 
-    # # Esperar a que todos los hilos finalicen
-    # for t in threads:
-    #     t.join()
+    # Esperar a que todos los hilos finalicen
+    for t in threads:
+        t.join()

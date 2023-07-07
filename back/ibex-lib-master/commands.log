@@ -7,3 +7,52 @@
 
 running............
 
+
+************************ setup ************************
+  file loaded:		benchs/optim/medium/alkylbis.bch
+  random seed:		1
+  output COV file:	benchs/optim/medium/alkylbis.cov
+*******************************************************
+
+running............
+
+Tiempo de linealizacion: 0.0767753910001
+Tiempo de ejecucion de la red: 1.79734861901
+Tiempo de ejecucion de simplex: 0.0966833730001
+Precision a la -3, acotamiento del box: 0.000586785461298
+Tiempo de ejecucion: 1.30442300001
+Numero de nodos visitados: 464
+Numero de variables de entrada: 11
+Precicion a la -3 considerando las variables de entrada: 5.33441328453e-05
+Preobabilidad aplicada sobre la red es de: 0.5
+ results written in benchs/optim/medium/alkylbis.cov
+ (old file saved in benchs/optim/medium/alkylbis.cov~)
+
+************************ setup ************************
+  file loaded:		benchs/optim/easy/ackley_5.bch
+  random seed:		3
+  output COV file:	benchs/optim/easy/ackley_5.cov
+*******************************************************
+
+running............
+
+Tiempo de linealizacion: 0.00141151400001
+Tiempo de ejecucion de la red: 0.0234244920001
+Tiempo de ejecucion de simplex: 2.15900000001e-05
+Precision a la -3, acotamiento del box: 2.57300368342e-08
+Tiempo de ejecucion: 0.0112380000001
+Numero de nodos visitados: 22
+Numero de variables de entrada: 11
+Precicion a la -3 considerando las variables de entrada: 2.33909425766e-09
+Preobabilidad aplicada sobre la red es de: 0.5
+ results written in benchs/optim/easy/ackley_5.cov
+ (old file saved in benchs/optim/easy/ackley_5.cov~)
+
+************************ setup ************************
+  file loaded:		benchs/optim/hard/chembis.bch
+  random seed:		1
+  output COV file:	benchs/optim/hard/chembis.cov
+*******************************************************
+
+running............
+
